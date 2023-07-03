@@ -6,6 +6,10 @@ import { useEffect } from "react";
 import Start from "./pages/Start"
 import SignInGuest from './pages/SigninGuest';
 import NoPage from './pages/NoPage';
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
+import { Account } from "./components/Account";
+import Status from "./components/Status";
 
 
 function LocationListener(){
@@ -40,15 +44,20 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
-      <LocationListener />
-        <Routes>
-            <Route index element= {<Start/>} />
-            <Route path='/start' element= {<Start/>} />
-            <Route path='/guestsignin' element = {<SignInGuest />}/>
-            <Route path='*' element = {<NoPage/>} />
-        </Routes>
-      </BrowserRouter>
+      <Account>
+        <Status/>
+        <BrowserRouter>
+        <LocationListener />
+          <Routes>
+              <Route index element= {<Start/>} />
+              <Route path='/start' element= {<Start/>} />
+              <Route path='/guestsignin' element = {<SignInGuest />}/>
+              <Route path="/login" element = {<Login/>}/>
+              <Route path="/signup" element = {<SignUp/>}/>
+              <Route path='*' element = {<NoPage/>} />
+          </Routes>
+        </BrowserRouter>
+      </Account>
     </div>
   );
 }
