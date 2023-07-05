@@ -1,9 +1,12 @@
 import logo from "../static/images/runnersDenLogoNoBG.png"
 import Button from "../components/Button";
+import { useEffect } from "react";
 
 
-export default function StartPage(){
-
+export default function StartPage({onStart}){
+    // useEffect(()=>{
+    //     onStart();
+    // },[]);
     return(
         <div className="start">
             <img className="runnersDenLogo" src={logo} alt="logo"/>
@@ -14,9 +17,9 @@ export default function StartPage(){
             </div>
 
             <div className="button-containers">
-                <Button link={"signup"} buttonText={"Create Account"}/>
-                <Button link={"login"} buttonText={"Sign In"} />
-                <Button link={"guestsignin"} buttonText={"Continue as Guest"} /> 
+                <Button classname={"buttons"} link={"signup"} buttonText={"Create Account"}/>
+                <Button classname={"buttons"} link={"login"} buttonText={"Sign In"} />
+                <Button classname={"buttons"} link={"guestsignin"} buttonText={"Continue as Guest"} /> 
             </div>
         </div>
     );

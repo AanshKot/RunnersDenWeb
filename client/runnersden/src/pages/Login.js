@@ -2,9 +2,11 @@ import { useState,useRef, useEffect,useContext } from "react";
 import { AccountContext } from "../components/Account";
 
 import MobilityButtons from "../components/MobilityButtons";
-
+import { faWarning } from "@fortawesome/free-solid-svg-icons";
 
 import TOS from '../components/TOS';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Auth } from "aws-amplify";
 
 
 
@@ -12,30 +14,17 @@ import TOS from '../components/TOS';
 
 
 
-export default function Login() {
+export default function Login({ onSignIn }) {
   const [hideTOSparagraph, setHideTOSparagraph] = useState(false);
-  const [showTOS,setShowTOS] = useState(false);
-
-
-  const { authenticate } = useContext(AccountContext);
-  
+  const [showTOS,setShowTOS] = useState(false);  
   
   const errRef = useRef();
-
-  const [email,setEmail] = useState("");
-
-
-
-  const [pwd,setPwd] = useState("");
-
-  const [errMsg,setErrMsg] = useState("");
-  const [success,setSuccess] = useState(false);
-
   
-
-
-
-
+  const [email,setEmail] = useState("");
+  
+  const [pwd,setPwd] = useState("");
+  const [errMsg,setErrMsg] = useState("");
+ 
   const handleClick = () => {
     setShowTOS(!showTOS);
   };
@@ -45,15 +34,20 @@ export default function Login() {
     setShowTOS(!showTOS);
   }
 
+  const signIn = async () => {
+    try{
+      const user = await Auth.signIn(email,pwd);
+      onSignIn();
+    }
+    catch (err) {
+      console.log("Error signing in ", err);
+      setErrMsg("Username or password was incorrect.");
+    }
+  }
+
   const onSubmit = (event) => {
     event.preventDefault();
-    authenticate(email,pwd).then(data => {
-        console.log("Logged in!", data);
-    }).catch(err => {
-        console.error("Failed to login",err);
-        setErrMsg("Email or password is incorrect");
-    })
-
+    signIn();   
   };
 
   return (
@@ -79,8 +73,10 @@ export default function Login() {
         
         {!showTOS && (
           <div className="sign-form">
-            {/* <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p> */}
-
+            
+            <div className={errMsg ? "errmsg-container" : "offscreen"}>
+                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive"><FontAwesomeIcon icon={faWarning}/>{errMsg}</p>
+            </div>
             
             <form onSubmit={onSubmit}>
               <div className="form-group">
