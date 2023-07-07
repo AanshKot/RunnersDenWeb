@@ -5,7 +5,7 @@ import { Auth } from 'aws-amplify';
 import { useState,useRef } from 'react';
 
 
-export default function VerifyAccount({email,onVerify}) {
+export default function VerifyAccount({email,pwd,onVerify}) {
   const [code, setCode] = useState('');
   
   const [errMsg,setErrMsg] = useState("")
@@ -15,10 +15,11 @@ export default function VerifyAccount({email,onVerify}) {
   console.log(email);
 
   const verifyEmailValidationCode = async (code) => {
+    
     try {
-      await Auth.confirmSignUp(email, code);
-      const user = await Auth.currentAuthenticatedUser();
-      onVerify();
+      await Auth.confirmSignUp(email,code);
+      
+      onVerify(email,pwd);
       console.log('Email verified');
     } catch (error) {
       console.log('Verification failed with error:', error);

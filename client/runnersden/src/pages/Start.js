@@ -4,9 +4,9 @@ import { useEffect } from "react";
 
 
 export default function StartPage({onStart}){
-    // useEffect(()=>{
-    //     onStart();
-    // },[]);
+    useEffect(()=>{
+        onStart();
+    },[]);
     return(
         <div className="start">
             <img className="runnersDenLogo" src={logo} alt="logo"/>

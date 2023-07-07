@@ -65,10 +65,15 @@ export default function SignUp({onVerify}) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    const initial_pref = JSON.stringify({"brands":[],"size":null,"gender":null});
+    
     try {
-      const user = await Auth.signUp({
+      const { user } = await Auth.signUp({
         username: email,
         password: pwd,
+        // attributes: {
+        //   'custom:preferences':initial_pref
+        // }
       });
       
       // onSignUp();
@@ -100,7 +105,7 @@ export default function SignUp({onVerify}) {
         </div>
         )}
 
-        { verifyAcc && <VerifyAccount email={email} onVerify={onVerify}/>}
+        { verifyAcc && <VerifyAccount email={email} pwd={pwd} onVerify={onVerify}/>}
         
         
         
