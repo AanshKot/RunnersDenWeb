@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-runnersdenweb-dev-172559-authRole",
+      "UnauthRoleArn": "arn:aws:iam::781481500711:role/amplify-runnersdenweb-dev-172559-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::781481500711:role/amplify-runnersdenweb-dev-172559-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-runnersdenweb-dev-172559-deployment",
+      "UnauthRoleName": "amplify-runnersdenweb-dev-172559-unauthRole",
+      "StackName": "amplify-runnersdenweb-dev-172559",
+      "StackId": "arn:aws:cloudformation:us-east-2:781481500711:stack/amplify-runnersdenweb-dev-172559/092a2d70-1dd6-11ee-b9f0-029178911b41",
+      "AmplifyAppId": "d269h7lbb6dmvb"
+    }
+  }
+}

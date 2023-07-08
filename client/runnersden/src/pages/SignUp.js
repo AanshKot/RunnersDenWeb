@@ -6,7 +6,7 @@ import { faCheck,faTimes,faInfoCircle, faWarning } from "@fortawesome/free-solid
 import { FontAwesomeFont, FontAwesomeIcon  } from "@fortawesome/react-fontawesome";
 import Button from "../components/Button";
 import TOS from '../components/TOS';
-import UserPool from "../UserPool";
+
 import { Auth } from "aws-amplify";
 import VerifyAccount from "../components/VerifyAccount";
 

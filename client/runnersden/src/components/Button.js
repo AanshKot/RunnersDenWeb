@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 
-export default function Button({link,buttonText}){
+export default function Button({classname,link,buttonText}){
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -8,6 +8,6 @@ export default function Button({link,buttonText}){
     };
 
     return(
-        <button className="buttons" onClick={handleClick}>{buttonText}</button>
+        <button className={classname} onClick={handleClick}>{buttonText}</button>
     )
 }
