@@ -1,0 +1,62 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-runnersden-dev-173809-authRole",
+      "UnauthRoleArn": "arn:aws:iam::781481500711:role/amplify-runnersden-dev-173809-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::781481500711:role/amplify-runnersden-dev-173809-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-runnersden-dev-173809-deployment",
+      "UnauthRoleName": "amplify-runnersden-dev-173809-unauthRole",
+      "StackName": "amplify-runnersden-dev-173809",
+      "StackId": "arn:aws:cloudformation:us-east-1:781481500711:stack/amplify-runnersden-dev-173809/bcb3d3e0-1dd7-11ee-83ec-0ed7e15cd27f",
+      "AmplifyAppId": "d191omueai2in8"
+    }
+  },
+  "auth": {
+    "runnersden59deab8859deab88": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_UPPERCASE",
+            "REQUIRES_NUMBERS"
+          ]
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-runnersden-dev-173809-deployment/amplify-cfn-templates/auth/runnersden59deab8859deab88-cloudformation-template.json",
+        "logicalId": "authrunnersden59deab8859deab88"
+      },
+      "lastPushTimeStamp": "2023-07-08T22:12:07.254Z",
+      "output": {
+        "UserPoolId": "us-east-1_cj2JgDnw0",
+        "AppClientIDWeb": "3cqgujo5hf0rcnfkan59749cvc",
+        "AppClientID": "5d489c5kkfvge56rd168cddot",
+        "IdentityPoolId": "us-east-1:6ad528e4-2d02-4293-96e6-42d69352d4bc",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:781481500711:userpool/us-east-1_cj2JgDnw0",
+        "IdentityPoolName": "runnersden59deab88_identitypool_59deab88__dev",
+        "UserPoolName": "runnersden59deab88_userpool_59deab88"
+      },
+      "lastPushDirHash": "YKl9UdvXnsiILAf6SF65jhJps0w="
+    }
+  }
+}
