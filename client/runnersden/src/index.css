@@ -754,3 +754,80 @@ h1,h2{
   font-weight: 500;
   line-height: normal;
 }
+
+
+/* ============= NavBar ============= */
+
+.navbar{
+  display: flex;
+  width: 100%;
+  height: 50px;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+.navlink{
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected-icon{
+  color: #2DBC50;
+  width: 40%;
+  height: 40%;
+}
+
+.deselected-icon{
+  color: #FFF;
+  width: 40%;
+  height: 40%;
+}
+
+/* ============= Start Scans =============== */
+
+.separate-content{
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.gif-content{
+  width: 90%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gif{
+  height: 100%;
+  width: 100%;
+}
+
+/* ============ Home ================ */
+
+.sub-content{
+  width: 90%;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.subgif-content{
+  width: 100%;
+  height: 50%;
+}

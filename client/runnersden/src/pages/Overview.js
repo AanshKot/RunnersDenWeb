@@ -1,12 +1,12 @@
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSpring , animated } from "react-spring";
 
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
+
 import { Auth } from "aws-amplify";
 
 function Overview() {
@@ -15,7 +15,7 @@ function Overview() {
         Auth.currentAuthenticatedUser().then(sess => {
           
           console.log("user is logged in");
-          Auth.signOut();
+          
         }).catch(() => {
          
           console.log("user isn't logged in");

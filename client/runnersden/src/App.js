@@ -15,6 +15,8 @@ import { Amplify, Auth } from "aws-amplify";
 import  awsconfig  from "./aws-exports";
 
 import StartScans from "./pages/StartScans";
+import Home from "./pages/Home";
+import Instructions from "./pages/Instructions";
 
 
 // make a show tutorial useState, set to true on SignUps/sign in as guest, false on logins
@@ -88,20 +90,10 @@ function App() {
   };
 
   const onSignIn = async () => {
-    const currentUser = await Auth.currentAuthenticatedUser();
-    setUser(currentUser);
-  
-    const attributes = currentUser.attributes;
-    const hasPreferences = attributes.hasOwnProperty("preferences");
-  
-    if (!hasPreferences) {
-      setLoggedIn(true);
-      navigate("/preferences");
-      
-    } else {
-      setLoggedIn(true);
-      navigate("/home");
-    }
+
+    setLoggedIn(true);
+    navigate("/home");
+ 
   };
 
 
@@ -123,48 +115,50 @@ function App() {
   }
 
   const onPreferencesChange = async (set_preferences) => {
-    if(loggedIn){
-      try{
-        
+    if (loggedIn) {
+      try {
         const user = await Auth.currentAuthenticatedUser();
         const jsonified_preferences = JSON.stringify(set_preferences);
-        
+  
         await Auth.updateUserAttributes(user, {
           'custom:preferences': jsonified_preferences
         });
-
-        const { attributes } = user;
+  
+        const { attributes } = await Auth.currentAuthenticatedUser();
         console.log('current attributes:', attributes);
-        
+  
         setPref(set_preferences);
         console.log("user preferences updated successfully");
-      }catch (error){
+      } catch (error) {
         console.log("Error updating preferences");
         console.log("Error details:", error.message, error.code);
       }
-    }else{
-      
+    } else {
       console.log(set_preferences);
       setPref(set_preferences);
     }
-  }
+  };
+  
 
-  const assessUserprefs = async () => {
-    if(loggedIn){
-    console.log("I am here");
-    const user = await Auth.currentAuthenticatedUser();
-    
-    if(user){
-     
-      const { preferences: updatedPreferences } = user.attributes;
+  // const assessUserprefs = async () => {
+  //     if(loggedIn){
+  //     console.log("I am here");
+  //     const user = await Auth.currentAuthenticatedUser();
+      
+  //     if(user){
+      
+  //       const { "custom:preferences": updatedPreferences } = user.attributes;
 
-      // Convert the preferences back to an object if needed
-      const parsedUpdatedPreferences = JSON.parse(updatedPreferences);
+  //       // Convert the preferences back to an object if needed
+  //       const parsedUpdatedPreferences = JSON.parse(updatedPreferences);
 
-      console.log("Updated user preferences:", parsedUpdatedPreferences);
-    }
-  }
-  }
+  //       console.log("Updated user preferences:", parsedUpdatedPreferences);
+  //     }
+  //   }
+  //   else{
+  //     console.log(preferences);
+  //   }
+  // }
 
   return (
     <div className="App">
@@ -178,9 +172,11 @@ function App() {
               <Route path='/guestsignin' element = {<SignInGuest onGuestSignIn={onGuestSignIn} />}/>
               <Route path="/login" element = {<Login onSignIn={onSignIn}/>}/>
               <Route path="/signup" element = {<SignUp onVerify={onVerify}/>}/>
+              <Route path="/home" element={<Home isLoggedIn={loggedIn} />}/>
               <Route path="/overview" element = {<Overview />}/>
               <Route path="/preferences" element = {<Preferences onPreferenceChange={onPreferencesChange} />} />
-              <Route path="/startscans" element={<StartScans onLoad={assessUserprefs}/>}/>
+              <Route path="/startscans" element={<StartScans isLoggedIn = {loggedIn} />}  />
+              <Route path="/instructions" element={<Instructions/>} />
               <Route path='*' element = {<NoPage/>} />
               
               {/* pass isLoggedIn as prop into sub-routes to determine if user is logged in, on the SignInasGuest the sign in button will simply redirect the user to the overview page */}

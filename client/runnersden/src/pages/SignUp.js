@@ -2,11 +2,11 @@ import { useState,useRef, useEffect } from "react";
 
 
 import MobilityButtons from "../components/MobilityButtons";
-import { faCheck,faTimes,faInfoCircle, faWarning } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeFont, FontAwesomeIcon  } from "@fortawesome/react-fontawesome";
-import Button from "../components/Button";
+import { faInfoCircle, faWarning } from "@fortawesome/free-solid-svg-icons"
+import {  FontAwesomeIcon  } from "@fortawesome/react-fontawesome";
+
 import TOS from '../components/TOS';
-import UserPool from "../UserPool";
+
 import { Auth } from "aws-amplify";
 import VerifyAccount from "../components/VerifyAccount";
 
@@ -39,7 +39,7 @@ export default function SignUp({onVerify}) {
 
   const [errMsg,setErrMsg] = useState("");
 
-  const [success,setSuccess] = useState(false);
+
   
 
  
@@ -71,9 +71,9 @@ export default function SignUp({onVerify}) {
       const { user } = await Auth.signUp({
         username: email,
         password: pwd,
-        // attributes: {
-        //   'custom:preferences':initial_pref
-        // }
+        attributes: {
+          'custom:preferences':initial_pref
+        }
       });
       
       // onSignUp();
