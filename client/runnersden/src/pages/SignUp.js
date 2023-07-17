@@ -2,11 +2,13 @@ import { useState,useRef, useEffect } from "react";
 
 
 import MobilityButtons from "../components/MobilityButtons";
-import { faCheck,faTimes,faInfoCircle } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeFont, FontAwesomeIcon  } from "@fortawesome/react-fontawesome";
-import Button from "../components/Button";
+import { faInfoCircle, faWarning } from "@fortawesome/free-solid-svg-icons"
+import {  FontAwesomeIcon  } from "@fortawesome/react-fontawesome";
+
 import TOS from '../components/TOS';
-import UserPool from "../UserPool";
+
+import { Auth } from "aws-amplify";
+import VerifyAccount from "../components/VerifyAccount";
 
 // const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
@@ -16,7 +18,7 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
 
 
 
-export default function SignUp() {
+export default function SignUp({onVerify}) {
   const [hideTOSparagraph, setHideTOSparagraph] = useState(false);
   const [showTOS,setShowTOS] = useState(false);
 
@@ -35,9 +37,13 @@ export default function SignUp() {
   const [validMatch,setValidMatch] = useState(false);
   const [matchFocus,setMatchFocus] = useState(false);
 
-  const [success,setSuccess] = useState(false);
+  const [errMsg,setErrMsg] = useState("");
+
+
   
 
+ 
+  const [verifyAcc,setVerifyAcc] = useState(false);
 
   useEffect(() => {
     const result = PWD_REGEX.test(pwd);
@@ -57,14 +63,26 @@ export default function SignUp() {
     setShowTOS(!showTOS);
   }
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    UserPool.signUp(email,pwd,[],null,(err,data) => {
-      if(err){
-        console.log(err);
-      }
-      console.log(data);
-    })
+    const initial_pref = JSON.stringify({"brands":[],"size":null,"gender":null});
+    
+    try {
+      const { user } = await Auth.signUp({
+        username: email,
+        password: pwd,
+        attributes: {
+          'custom:preferences':initial_pref
+        }
+      });
+      
+      // onSignUp();
+      setVerifyAcc(true);
+      
+    } catch (error) {
+      console.log(error);
+      setErrMsg("An account with this email already exists");
+    }
   };
 
   return (
@@ -86,12 +104,18 @@ export default function SignUp() {
                 </label>
         </div>
         )}
+
+        { verifyAcc && <VerifyAccount email={email} pwd={pwd} onVerify={onVerify}/>}
+        
+        
         
         
         {!showTOS && (
           <div className="sign-form">
             
-
+          <div className={errMsg ? "errmsg-container" : "offscreen"}>
+                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive"><FontAwesomeIcon icon={faWarning}/>{errMsg}</p>
+          </div>
             
             <form onSubmit={onSubmit}>
               <div className="form-group">
@@ -107,7 +131,7 @@ export default function SignUp() {
               </div>
 
               <div className="submit-form">
-                <button className= {(!validPwd || !validMatch) ? "disabled" : "submit-button"}>Sign Up</button>
+                <button className= {(!validPwd || !validMatch) ? "disabled" : "submit-button"} disabled = {(!validPwd || !validMatch)}>Sign Up</button>
                   
                   { !hideTOSparagraph && (
                     <div className="TOS-paragraph">
@@ -130,7 +154,7 @@ export default function SignUp() {
         )}
 
       {showTOS && (
-        <TOS returnUrl={"Start"} handleChange={handleValChange}/>
+        <TOS  handleChange={handleValChange}/>
       )}
     
           

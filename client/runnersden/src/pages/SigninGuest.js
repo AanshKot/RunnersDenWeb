@@ -6,10 +6,12 @@ import { useState } from "react";
 
 import MobilityButtons from "../components/MobilityButtons";
 import MeasureLogo from "../static/images/measure.png";
-import Button from "../components/Button";
+
 import TOS from '../components/TOS';
 
-export default function SignInGuest() {
+
+
+export default function SignInGuest({onGuestSignIn}) {
   const [hideTOSparagraph, setHideTOSparagraph] = useState(false);
   const [showTOS,setShowTOS] = useState(false);
 
@@ -54,28 +56,32 @@ export default function SignInGuest() {
 
       
       {!showTOS && (
-        <div className="continue-TOS-container">
-          <Button link={"appusage"} buttonText={"Sign in as Guest"} />
+        <form className="sign-in-guest" onSubmit={() => onGuestSignIn()}>
+          <div className="continue-TOS-container">
 
-          {!hideTOSparagraph && (
-            <div className="TOS-paragraph">
-              <p className="paragraph-line">
-                For your privacy all user data is anonymized and safeguarded
-              </p>
-              <p className="paragraph-line">
-                By signing in you agree to our Privacy Policy and Terms of Use
-              </p>
-              <p className="paragraph-line underline" onClick={handleClick}>
-                Click here to view terms
-              </p>
-            </div>
-          )}
-        </div>
+            
+            <button className="submit-button">Sign in as Guest</button>
+
+            {!hideTOSparagraph && (
+              <div className="TOS-paragraph">
+                <p className="paragraph-line">
+                  For your privacy all user data is anonymized and safeguarded
+                </p>
+                <p className="paragraph-line">
+                  By signing in you agree to our Privacy Policy and Terms of Use
+                </p>
+                <p className="paragraph-line underline" onClick={handleClick}>
+                  Click here to view terms
+                </p>
+              </div>
+            )}
+          </div>
+        </form>
       )}
 
      
       {showTOS && (
-        <TOS returnUrl={"Start"} handleChange={handleValChange}/>
+        <TOS  handleChange={handleValChange}/>
       )}
     
     </div>
