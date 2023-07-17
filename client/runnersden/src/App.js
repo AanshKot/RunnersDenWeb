@@ -92,8 +92,20 @@ function App() {
   const onSignIn = async () => {
 
     setLoggedIn(true);
-    navigate("/home");
- 
+    const currUserprefs = await assessUserprefs();
+
+    if(currUserprefs){
+      if(currUserprefs.size === null || currUserprefs.gender === null){
+        navigate("/preferences")
+      }
+      else{
+        navigate("/home");
+      }
+    }
+
+
+
+    
   };
 
 
@@ -140,25 +152,25 @@ function App() {
   };
   
 
-  // const assessUserprefs = async () => {
-  //     if(loggedIn){
-  //     console.log("I am here");
-  //     const user = await Auth.currentAuthenticatedUser();
+  const assessUserprefs = async () => {
+      if(loggedIn){
+      console.log("Assessing User Prefs");
+      const user = await Auth.currentAuthenticatedUser();
       
-  //     if(user){
+      if(user){
       
-  //       const { "custom:preferences": updatedPreferences } = user.attributes;
+        const { "custom:preferences": updatedPreferences } = user.attributes;
 
-  //       // Convert the preferences back to an object if needed
-  //       const parsedUpdatedPreferences = JSON.parse(updatedPreferences);
+        // Convert the preferences back to an object if needed
+        const parsedUpdatedPreferences = JSON.parse(updatedPreferences);
 
-  //       console.log("Updated user preferences:", parsedUpdatedPreferences);
-  //     }
-  //   }
-  //   else{
-  //     console.log(preferences);
-  //   }
-  // }
+        console.log("User preferences:", parsedUpdatedPreferences);
+        return parsedUpdatedPreferences;
+      }
+    }
+
+    return null;
+  }
 
   return (
     <div className="App">
@@ -176,7 +188,8 @@ function App() {
               <Route path="/overview" element = {<Overview />}/>
               <Route path="/preferences" element = {<Preferences onPreferenceChange={onPreferencesChange} />} />
               <Route path="/startscans" element={<StartScans isLoggedIn = {loggedIn} />}  />
-              <Route path="/instructions" element={<Instructions/>} />
+              <Route path="/instructions/*" element={<Instructions />} />
+              <Route path="/instructions/:step" element={<Instructions isLoggedIn={loggedIn}/>} />
               <Route path='*' element = {<NoPage/>} />
               
               {/* pass isLoggedIn as prop into sub-routes to determine if user is logged in, on the SignInasGuest the sign in button will simply redirect the user to the overview page */}

@@ -831,3 +831,82 @@ h1,h2{
   width: 100%;
   height: 50%;
 }
+
+
+/* ================= Instructions Videos ============== */
+
+.instructions-vid-container{
+  height: max-content;
+  max-height: 500px;
+}
+
+.instructions-video{
+  height: 80%;
+  width: 100%;
+}
+
+
+.progressbar-container{
+  width: 100%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: max-content;
+}
+
+.progressbar{
+  height: 5px;
+  width: 20%;
+  background: #747474;
+  border-radius: 8px;
+}
+
+.progressbar-loaded{
+  border-radius: 10px;
+}
+
+.fully-loaded{
+  height: 5px;
+  width: 20%;
+  background: #FFF;
+  border-radius: 8px;
+}
+
+.paper-container{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  height: 40%;
+}
+
+.unselectable{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  filter: blur(5px); /* Apply the blur effect */
+  opacity: 0.6; /* Reduce the opacity to make it visually less prominent */
+  pointer-events: none; /* Add a cursor pointer to indicate it's clickable */
+}
+
+.selected-paper {
+  /* Add styles for the selected paper here */
+  border: 5px solid #1DFF54; /* Add a 5px green border around the selected paper */
+}
+
+
+.paper{
+  width: 100%;
+  height: 100%;
+}
+
+.paragraph-desc{
+  color: #FFF;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
