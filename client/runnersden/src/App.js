@@ -17,6 +17,11 @@ import  awsconfig  from "./aws-exports";
 import StartScans from "./pages/StartScans";
 import Home from "./pages/Home";
 import Instructions from "./pages/Instructions";
+import LeftFoot from "./pages/LeftFoot";
+import RightFoot from "./pages/RightFoot";
+import Confirmation from "./pages/Confirmation";
+
+
 
 
 // make a show tutorial useState, set to true on SignUps/sign in as guest, false on logins
@@ -29,9 +34,13 @@ function LocationListener(){
   
     useEffect(() => {
         let isStartPage = false;
-
+        let isConfirmPage = false;
         if(location.pathname === "/" || location.pathname === "/Start"){
             isStartPage = true;
+        }
+
+        if(location.pathname === "/confirmation/L" || location.pathname === "/confirmation/R"){
+          isConfirmPage = true;
         }
 
 
@@ -40,9 +49,14 @@ function LocationListener(){
         if (isStartPage) {
         document.documentElement.classList.add('start-page');
         document.body.classList.add('start-page');
+        }else if(isConfirmPage){
+          document.documentElement.classList.add('confirm-page');
+          document.body.classList.add('confirm-page');
         } else {
         document.documentElement.classList.remove('start-page');
         document.body.classList.remove('start-page');
+        document.documentElement.classList.remove('confirm-page');
+        document.body.classList.remove('confirm-page');
         }
     }, [location]);
 
@@ -178,7 +192,7 @@ function App() {
        
         
         <LocationListener />
-          <Routes>
+        <Routes>
               <Route index element= {<Start onStart={signOut}/>} />
               <Route path='/start' element= {<Start onStart={signOut}/>} />
               <Route path='/guestsignin' element = {<SignInGuest onGuestSignIn={onGuestSignIn} />}/>
@@ -188,12 +202,15 @@ function App() {
               <Route path="/overview" element = {<Overview />}/>
               <Route path="/preferences" element = {<Preferences onPreferenceChange={onPreferencesChange} />} />
               <Route path="/startscans" element={<StartScans isLoggedIn = {loggedIn} />}  />
-              <Route path="/instructions/*" element={<Instructions />} />
+              <Route path="/instructions/" element={<Instructions />} />
               <Route path="/instructions/:step" element={<Instructions isLoggedIn={loggedIn}/>} />
-              <Route path='*' element = {<NoPage/>} />
-              
-              {/* pass isLoggedIn as prop into sub-routes to determine if user is logged in, on the SignInasGuest the sign in button will simply redirect the user to the overview page */}
-              {/* No need for private routes */}
+              <Route path="/leftfoot" element={<LeftFoot isLoggedIn={loggedIn}/>} /> 
+              <Route path="/rightfoot" element={<RightFoot isLoggedIn={loggedIn}/>} />
+              <Route path="/confirmation/:type" element={<Confirmation />} />
+              <Route path='' element = {<NoPage/>} />
+
+              {/* pass isLoggedIn as prop into sub-routes to determine if user is logged in, on the SignInasGuest the sign in button will simply redirect the user to the overview page /}
+              {/ No need for private routes */}
           </Routes>
         
       
