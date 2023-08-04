@@ -13,6 +13,8 @@ function Home({isLoggedIn}) {
         navigate(url);
     }
 
+    
+
     return (
         <div className="separate-content">
             <div className="content">

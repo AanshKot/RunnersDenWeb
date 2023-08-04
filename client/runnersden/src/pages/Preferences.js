@@ -87,10 +87,10 @@ function SizeDropDown({ handleClick }) {
 function GenderDropDown({ handleClick }) {
   const dropDownRows = [];
   dropDownRows.push(
-    <DropDownRow size={"Men's"} onClick={() => handleClick("M")} />
+    <DropDownRow size={"Men's"} onClick={() => handleClick("Men's")} />
   );
   dropDownRows.push(
-    <DropDownRow size={"Women's"} onClick={() => handleClick("W")} />
+    <DropDownRow size={"Women's"} onClick={() => handleClick("Women's")} />
   );
 
   return <div className='dropdown'>{dropDownRows}</div>;

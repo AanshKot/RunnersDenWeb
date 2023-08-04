@@ -6,17 +6,46 @@ import { Auth } from 'aws-amplify';
 import { useEffect,useState,useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function RightFoot({isLoggedIn}) {
+function RightFoot({isLoggedIn,guestID}) {
     const videoRef = useRef(null);
     const photoRef = useRef(null);
     const navigate = useNavigate();
 
     const [hasPhoto,setHasPhoto] = useState(false);
-   
+    
+    const upload_S3 = async (userID, base64Image) => {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userID: userID,
+            image: base64Image,
+          }),
+        };
+      
+        try {
+          const response = await fetch(`http://localhost:5050/rightfoot`, requestOptions);
+          if (!response.ok) {
+            throw new Error('Endpoint response was not ok');
+          }
+          const data = await response.json();
+          console.log('Image uploaded successfully:', data.s3ObjectURL);
+          return data.s3ObjectURL;
+        } catch (error) {
+          console.error('Error uploading image:', error);
+          // Handle the error accordingly if needed
+          throw error; // Rethrow the error to be handled later in the application
+        }
+      };
 
-    const getVideo = () => {
-        
-        navigator.mediaDevices.getUserMedia({audio : false ,video: {width : 1080, height : 1920,facingMode:"environment"} }).then(stream => {
+      const getVideo = () => {
+        const aspectRatioWidth = 3;
+        const aspectRatioHeight = 4;
+
+        // ideal condition
+        navigator.mediaDevices.getUserMedia({audio : false ,video: { height : { ideal : 5000 } ,facingMode:"environment"} }).then(stream => {
             let video = videoRef.current;
             video.srcObject = stream;
             video.play();
@@ -29,7 +58,7 @@ function RightFoot({isLoggedIn}) {
 
     const takePhoto = async () => {
         const width = 414;
-        const height = width/(16/9);
+        const height = width * 1.3;
         
         
 
@@ -50,19 +79,44 @@ function RightFoot({isLoggedIn}) {
 
         if(isLoggedIn){
             try {
-                const user =  await Auth.currentAuthenticatedUser();
-                const jsonified_img_64 = JSON.stringify(base64Image);
+                // const user =  await Auth.currentAuthenticatedUser();
+                // const jsonified_img_64 = JSON.stringify(base64Image);
 
-                await Auth.updateUserAttributes(user, {
-                    'custom:imageR': jsonified_img_64
-                  });
+                // await Auth.updateUserAttributes(user, {
+                //     'custom:imageL': jsonified_img_64
+                //   });
+
+                const user =  await Auth.currentAuthenticatedUser();
+
+                if(user){
+      
+                    const { "custom:id": userID } = user.attributes;
+            
+                    // Convert the preferences back to an object if needed
+                    const parsedID = JSON.parse(userID);
+            
+                    // console.log("User ID:", parsedID);
+                   
+                    const imageRUrl = await upload_S3(parsedID,base64Image);
+                    const json_imageRUrl = JSON.stringify(imageRUrl);
+
+                    await Auth.updateUserAttributes(user, {
+                        'custom:imageR': json_imageRUrl
+                    });
+                
+                    console.log("User imageR updated");
+
+                  }
 
             } catch (error) {
                 console.log("error updating image",error);
             }
         }
         else{
-            sessionStorage.setItem("imageR",base64Image);
+
+            const imageLUrl = await upload_S3(guestID,base64Image);
+
+            sessionStorage.setItem("imageR",imageLUrl);
             console.log("stored imageR in session storage");
         }
         

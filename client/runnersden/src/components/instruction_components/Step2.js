@@ -14,6 +14,7 @@ function Step2() {
   useEffect(() => {
     if (selectedPaperSize) {
       setRenderNext(true);
+      localStorage.setItem("paperSize",selectedPaperSize);
     } else {
       setRenderNext(false);
     }
@@ -23,12 +24,12 @@ function Step2() {
     if (selectedPaperSize === paperSize) {
       setSelectedPaperSize(null); // Unselect the currently selected paper
 
-      if(paperSize === "legal"){
+      if(paperSize === "Legal"){
         setLegalClassname("initial-paper");
         setLetterClassname("initial-paper");
       }
 
-      else if(paperSize === "letter"){
+      else if(paperSize === "Letter"){
         setLetterClassname("initial-paper");
         setLegalClassname("initial-paper");
       }
@@ -36,12 +37,12 @@ function Step2() {
     } else {
       setSelectedPaperSize(paperSize); // Select the clicked paper
 
-      if(paperSize === "legal"){
+      if(paperSize === "Legal"){
         setLetterClassname("unselectable");
         setLegalClassname("selected-paper")
       }
 
-      else if(paperSize === "letter"){
+      else if(paperSize === "Letter"){
         setLegalClassname("unselectable");
         setLetterClassname('selected-paper');
       }
@@ -76,7 +77,7 @@ function Step2() {
           className={
             letter_classname
           }
-          onClick={() => handlePaperSelect("letter")}
+          onClick={() => handlePaperSelect("Letter")}
         >
           <img className="paper" src={Letter} alt="letter" />
         </div>
@@ -84,7 +85,7 @@ function Step2() {
           className={
             legal_classname
           }
-          onClick={() => handlePaperSelect("legal")}
+          onClick={() => handlePaperSelect("Legal")}
         >
           <img className="paper" src={Legal} alt="legal" />
         </div>

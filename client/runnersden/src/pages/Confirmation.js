@@ -13,14 +13,16 @@ function Confirmation() {
     const navigate = useNavigate();
 
     const handleClick =  async () => {
-         window.history.replaceState(null, null, navLink); // Use replaceState to navigate without mounting on top
-         window.location.reload(); // Reload the page to reflect the new URL
+        //  window.history.replaceState(null, null, navLink); // Use replaceState to navigate without mounting on top
+        //  window.location.reload(); // Reload the page to reflect the new URL
+
+        navigate(navLink);
       };
     
 
     useEffect(()=>{
         if(type === "R"){
-            setNavLink("/myshoes");
+            setNavLink("/shoes");
         }
         else{
             setNavLink("/rightfoot");
@@ -31,7 +33,7 @@ function Confirmation() {
 
     return (
         <div className="content" style={{
-            background: "#2DBC50;"
+            background: "#2DBC50"
         }}>
            
            
