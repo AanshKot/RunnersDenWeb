@@ -91,6 +91,7 @@ function App() {
   useEffect(() => {
     AssessLoggedInState()
     console.log(preferences);
+    console.log(guestID);
   },[])
 
   const signOut = async () => {
@@ -225,7 +226,7 @@ function App() {
               <Route path="/leftfoot" element={<LeftFoot isLoggedIn={loggedIn} guestID={guestID}/>} /> 
               <Route path="/rightfoot" element={<RightFoot isLoggedIn={loggedIn} guestID = {guestID}/> }  />
               <Route path="/confirmation/:type" element={<Confirmation />} />
-              <Route path="/shoes" element = {<Shoes />} /> 
+              <Route path="/shoes" element = {<Shoes guestPreferences={preferences} isLoggedIn={loggedIn} guestID={guestID} />} /> 
               <Route path='*' element = {<NoPage/>} />
 
               {/* pass isLoggedIn as prop into sub-routes to determine if user is logged in, on the SignInasGuest the sign in button will simply redirect the user to the overview page /}
