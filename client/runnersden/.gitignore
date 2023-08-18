@@ -44,3 +44,10 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+
+#googleSheet credentials
+credentials.json
+
+
+.env

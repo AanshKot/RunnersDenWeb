@@ -17,6 +17,12 @@ import  awsconfig  from "./aws-exports";
 import StartScans from "./pages/StartScans";
 import Home from "./pages/Home";
 import Instructions from "./pages/Instructions";
+import LeftFoot from "./pages/LeftFoot";
+import RightFoot from "./pages/RightFoot";
+import Confirmation from "./pages/Confirmation";
+import Shoes from "./pages/Shoes";
+
+
 
 
 // make a show tutorial useState, set to true on SignUps/sign in as guest, false on logins
@@ -29,9 +35,13 @@ function LocationListener(){
   
     useEffect(() => {
         let isStartPage = false;
-
+        let isConfirmPage = false;
         if(location.pathname === "/" || location.pathname === "/Start"){
             isStartPage = true;
+        }
+
+        if(location.pathname === "/confirmation/L" || location.pathname === "/confirmation/R"){
+          isConfirmPage = true;
         }
 
 
@@ -40,9 +50,14 @@ function LocationListener(){
         if (isStartPage) {
         document.documentElement.classList.add('start-page');
         document.body.classList.add('start-page');
+        }else if(isConfirmPage){
+          document.documentElement.classList.add('confirm-page');
+          document.body.classList.add('confirm-page');
         } else {
         document.documentElement.classList.remove('start-page');
         document.body.classList.remove('start-page');
+        document.documentElement.classList.remove('confirm-page');
+        document.body.classList.remove('confirm-page');
         }
     }, [location]);
 
@@ -55,7 +70,8 @@ function App() {
   const [preferences,setPref] = useState({"brands":[],"size":null,"gender":null});
   
   const [user,setUser] = useState({"type":"guest"});
-  
+  const [guestID,setGuestID] = useState(999999999);
+
   const navigate = useNavigate();
   
   // console.log(user.type);
@@ -74,6 +90,8 @@ function App() {
 
   useEffect(() => {
     AssessLoggedInState()
+    console.log(preferences);
+    console.log(guestID);
   },[])
 
   const signOut = async () => {
@@ -120,8 +138,23 @@ function App() {
 
   // sign out current user on Guest sign ins
 
+  function generateUniqueID() {
+    // Get the current timestamp in milliseconds
+    const timestamp = Date.now();
+  
+    // Extract the last 9 digits of the timestamp
+    const last9Digits = timestamp.toString().slice(-9);
+  
+    console.log(last9Digits);
+  
+    return last9Digits;
+  }
+
+
   const onGuestSignIn = () => {
     setLoggedIn(false);
+    const guest = generateUniqueID();
+    setGuestID(guest);
     setUser({"type":"guest","preferences":preferences});
     navigate("/overview");
   }
@@ -178,7 +211,7 @@ function App() {
        
         
         <LocationListener />
-          <Routes>
+        <Routes>
               <Route index element= {<Start onStart={signOut}/>} />
               <Route path='/start' element= {<Start onStart={signOut}/>} />
               <Route path='/guestsignin' element = {<SignInGuest onGuestSignIn={onGuestSignIn} />}/>
@@ -188,12 +221,16 @@ function App() {
               <Route path="/overview" element = {<Overview />}/>
               <Route path="/preferences" element = {<Preferences onPreferenceChange={onPreferencesChange} />} />
               <Route path="/startscans" element={<StartScans isLoggedIn = {loggedIn} />}  />
-              <Route path="/instructions/*" element={<Instructions />} />
+              <Route path="/instructions/" element={<Instructions />} />
               <Route path="/instructions/:step" element={<Instructions isLoggedIn={loggedIn}/>} />
+              <Route path="/leftfoot" element={<LeftFoot isLoggedIn={loggedIn} guestID={guestID}/>} /> 
+              <Route path="/rightfoot" element={<RightFoot isLoggedIn={loggedIn} guestID = {guestID}/> }  />
+              <Route path="/confirmation/:type" element={<Confirmation />} />
+              <Route path="/shoes" element = {<Shoes guestPreferences={preferences} isLoggedIn={loggedIn} guestID={guestID} />} /> 
               <Route path='*' element = {<NoPage/>} />
-              
-              {/* pass isLoggedIn as prop into sub-routes to determine if user is logged in, on the SignInasGuest the sign in button will simply redirect the user to the overview page */}
-              {/* No need for private routes */}
+
+              {/* pass isLoggedIn as prop into sub-routes to determine if user is logged in, on the SignInasGuest the sign in button will simply redirect the user to the overview page /}
+              {/ No need for private routes */}
           </Routes>
         
       

@@ -63,16 +63,29 @@ export default function SignUp({onVerify}) {
     setShowTOS(!showTOS);
   }
 
+  function generateUniqueID() {
+    // Get the current timestamp in milliseconds
+    const timestamp = Date.now();
+  
+    // Extract the last 9 digits of the timestamp
+    const last9Digits = timestamp.toString().slice(-9);
+  
+    console.log(last9Digits);
+  
+    return last9Digits;
+  }
+
   const onSubmit = async (event) => {
     event.preventDefault();
     const initial_pref = JSON.stringify({"brands":[],"size":null,"gender":null});
-    
+    const uniqueID = generateUniqueID();
     try {
       const { user } = await Auth.signUp({
         username: email,
         password: pwd,
         attributes: {
-          'custom:preferences':initial_pref
+          'custom:preferences':initial_pref,
+          'custom:id': uniqueID
         }
       });
       
