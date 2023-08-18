@@ -1,40 +1,4 @@
 
-
-const callAPI = async () => {
-    const endpoint = "http://35.183.77.17:5000/api"; 
-
-    const parameters = {
-        "userid": 141658153,
-        "left_link": "https://809cd8fc26abdd8143d6399e79b15687.cdn.bubble.io/f1682705034358x749551136621391100/image%2Fjpeg",
-        "right_link": "https://809cd8fc26abdd8143d6399e79b15687.cdn.bubble.io/f1682705057258x898183029341518700/image%2Fjpeg",
-        "paper_size": "Letter",
-        "sex": "Men's",
-        "resize": 0.4,
-        "debug": "False",
-      };
-    
-
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: parameters,
-      };
-
-      await fetch(endpoint,requestOptions).then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-      }).then((data) => {
-        console.log(data);
-      }).catch((error) => {
-        console.error("Error calling the API:", error);
-      });
-    
-
-}
-
 import { S3Client,GetObjectCommand } from "@aws-sdk/client-s3";
 
 import dotenv from 'dotenv';
@@ -98,33 +62,27 @@ const getObjectFromS3 = async (imageUrl) => {
 
       console.log(response);
     //   The response contains the image data in the `Body` property
-      const imageBuffer = await new Promise((resolve, reject) => {
-        const chunks = [];
-        response.Body.on("data", (chunk) => chunks.push(chunk));
-        response.Body.on("end", () => resolve(Buffer.concat(chunks)));
-        response.Body.on("error", (error) => reject(error));
+    const chunks = [];
+
+      response.Body.on("data", (chunk) => {
+          chunks.push(chunk);
       });
-  
-
-      console.log("Image fetched successfully!");
-  
-
-      const base64Image = imageBuffer.toString("base64");
-
-      const imageSrc = `data:image/jpeg;base64,${base64Image}`;
       
-
-
-
-      const imgUrl = URL.createObjectURL(base64ToBlob(imageSrc));
-
-      console.log("Image source:", imageSrc);
-      console.log('Img URL',imgUrl);
+      response.Body.on("end", () => {
+          const imageBuffer = Buffer.concat(chunks);
+          const base64Image = imageBuffer.toString("base64");
+          const imageSrc = `data:image/jpeg;base64,${base64Image}`;
+          const adjustedImageSrc = imageSrc.replace('dataimage/jpegbase64', '');
+          console.log("Image source:", adjustedImageSrc);
+          
+      });
+    
+  
     } catch (error) {
       console.error("Error fetching image from S3:", error);
     }
   };
 
 
-// getObjectFromS3("https://universoleimagesbucket.s3.amazonaws.com/999999999-L.jpg");
+getObjectFromS3("https://universoleimagesbucket.s3.amazonaws.com/999999999-L.jpg");
 

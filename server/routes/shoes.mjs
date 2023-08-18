@@ -18,52 +18,7 @@ const accessKey = process.env.ACCESS_KEY;
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 
 
-const getObjectFromS3 = async (imageUrl) => {
-    // Parse the bucket name and key from the S3 URL
-    const s3UrlRegex = new RegExp(`^https://${bucketName}.s3.amazonaws.com/(.+)$`);
 
-    // need the key and the bucketname to get the Object from the S3bucket
-    const [, key] = imageUrl.match(s3UrlRegex);
-  
-    // Create an instance of the S3 client
-    const s3 = new S3Client({
-      credentials: {
-        accessKey,
-        secretAccessKey,
-      },
-      region: bucketRegion,
-    });
-  
-    // Prepare the GetObjectCommand
-    const params = {
-      Bucket: bucketName,
-      Key: key,
-    };
-    const command = new GetObjectCommand(params);
-  
-    try {
-      // Fetch the object from S3
-      const response = await s3.send(command);
-  
-      // The response contains the image data in the `Body` property
-      const imageBuffer = await new Promise((resolve, reject) => {
-        const chunks = [];
-        response.Body.on("data", (chunk) => chunks.push(chunk));
-        response.Body.on("end", () => resolve(Buffer.concat(chunks)));
-        response.Body.on("error", (error) => reject(error));
-      });
-  
-
-      console.log("Image fetched successfully!");
-  
-
-      const base64Image = imageBuffer.toString("base64");
-      const imageSrc = `data:image/jpeg;base64,${base64Image}`;
-      console.log("Image source:", imageSrc);
-    } catch (error) {
-      console.error("Error fetching image from S3:", error);
-    }
-  };
 
   async function makePostRequest(url, data) {
     const headers = {
@@ -136,7 +91,16 @@ router.post("/",async (req,res) => {
 
         const shoeModelRecs = shoes["Shoe Model Recommendations"];
 
+        console.log(shoeModelRecs);
 
+        const left_error = shoes["left_error"];
+        const right_error = shoes["right_error"];
+
+        // if(left_error || right_error){
+        //   return res.status(400).json({ error: "Foot scan images are not valid. Please redo your foot scan." });
+        // }
+
+        
 
        
         const auth = new google.auth.GoogleAuth({
@@ -154,17 +118,9 @@ router.post("/",async (req,res) => {
 
         const googleSheets = google.sheets({ version: "v4",auth: client });
 
-        // // Get metadata from spreadsheet
 
         const spreadsheetId = "1KLkj7OZ7qNSSErn905PrLOmRl96XkQ4X9WYocmRIzpc";
 
-        const metaData = await googleSheets.spreadsheets.get({
-          auth,
-
-          spreadsheetId,
-        })
-
-        // console.log(metaData);
 
         const getRows = await googleSheets.spreadsheets.values.get({
           auth,
@@ -189,7 +145,8 @@ router.post("/",async (req,res) => {
 
           for(let i = 0; i < shoesData.length; i++){
             if(shoesData[i].length != 0 && shoesData[i][1] === modelName){
-              sendClientRecs.push(shoesData[i]);
+              const rec_size = shoeModelRecs[modelName]
+              sendClientRecs.push([shoesData[i],rec_size]);
             }
           }
 
@@ -199,7 +156,9 @@ router.post("/",async (req,res) => {
 
         res.status(200).json({ sendClientRecs });
     } catch (error) {
+        console.log(error);
         res.sendStatus(500);
+
     }
 })
 

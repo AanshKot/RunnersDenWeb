@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 
-const storage = multer.memoryStorage();
+
 
 const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
@@ -34,7 +34,7 @@ router.post("/",async(req,res) => {
 
     const imageBuffer = Buffer.from(imageBase64,'base64');
 
-    
+    console.log(imageBase64);
 
     const params = {
         Bucket: bucketName,

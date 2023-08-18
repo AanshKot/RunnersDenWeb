@@ -193,6 +193,8 @@ h1,h2{
   height: 30%;
 }
 
+
+
 .content .continue-TOS-container .buttons{
   width: 100%;
   height: 23%; 
@@ -975,4 +977,167 @@ h1,h2{
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.searchbar{
+  border-radius: 15px;
+  background: #17DB4E;
+  display: flex;
+  flex-direction: column;
+  width: 230px;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+
+.searchDesc{
+  color: #FFF;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.shoe-content{
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 100px;
+
+}
+
+.shoes{
+  /* overflow-x: hidden;
+  overflow-y: auto; */
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+
+.dropDown{
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+}
+
+.shoe-container{
+  width: 100%;
+  height: max-content;
+  max-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1 0 0;
+  border-radius: 10px;
+  background: #FFF;
+}
+
+.image-model-container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.shoe-img{
+  max-width: 200px;
+  max-height: 100px;
+  z-index: 100;
+}
+
+.text-backdrop{
+  height: 50%;
+  width: 100%;
+  /* position: relative; */
+  color: rgba(51, 51, 51, 0.50);
+  text-align: center;
+  
+  font-family: Poppins;
+  font-size: 180px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  /* z-index: -1; */
+}
+
+.shoe-desc{
+  width: 100%;
+  position: relative;
+  left: 5px;
+}
+
+
+.loader {
+  top: 0;
+  left: 0;
+  /* width: 100vw;
+  height: 100vh; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background: #333333; */
+  transition: opacity 0.75s, visibility 0.75s;
+}
+
+
+.loader::after {
+  content: "";
+  width: 75px;
+  height: 75px;
+  border: 15px solid #FFF;
+  border-top-color: #17DB4E;
+  border-radius: 50%;
+  animation: loading 0.75s ease infinite;
+}
+
+@keyframes loading {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+
+.noResults{
+  text-align: center;
+  
+}
+
+
+/* ============= Filter Dropdown =================== */
+
+.filter-button{
+  border: none;
+  width: 100%;
+  font-family: 'Poppins', sans-serif; 
+  
+}
+
+.unfiltered{
+  background: #FFF;
+}
+
+.filtered{
+  box-shadow: #1DFF54;
+
 }

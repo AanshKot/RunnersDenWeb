@@ -26,7 +26,7 @@ function Step1() {
             </div>
 
             <div className="instructions-vid-container">
-            <video className="instructions-video" controls autoPlay={true} onPause={handlePause} onPlay={onPlay}>
+            <video className="instructions-video" controls playsInline autoPlay={true} onPause={handlePause} onPlay={onPlay}>
                 <source src={Instructions12} type="video/mp4"/>
                 Your browser does not support the video tag.
             </video>
