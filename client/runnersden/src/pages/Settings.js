@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MobilityButtons from '../components/MobilityButtons';
 import Nike from "../static/images/nike.png";
 import Adidas from '../static/images/adidas.png';
@@ -10,6 +10,7 @@ import Saucony from "../static/images/saucony.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { Auth } from 'aws-amplify';
 
 function Brand({brand,onBrandClick,selected,logo}){
 
@@ -97,18 +98,65 @@ function GenderDropDown({ handleClick }) {
 }
 
 
-function Preferences({onPreferenceChange}) {
+function Settings({onPreferenceChange,isLoggedIn}) {
+    
 
-    const [selectedBrands,setSelectedBrands] = useState([false,false,false,false,false,false,false]);
-    const [userBrandPrefs, setUserBrandPrefs] = useState([])
-    const [size,setSize] = useState(null);
-    const [gender,setGender] = useState(null);
+
+    const [selectedBrands, setSelectedBrands] = useState([]);
+    const [userBrandPrefs, setUserBrandPrefs] = useState([]);
+    const [size, setSize] = useState(null);
+    const [gender, setGender] = useState(null);
 
     const [sizeDropDown,setSizeDropdown] = useState(false);
     const [genderDropDown,setGenderDropdown] = useState(false);
 
     const [sizeButtonText,setSizeButtonText] = useState("Choose a size");
     const [genderButtonText,setGenderButtonText] = useState("Men's/Women's");
+
+    const updateStates = (parsedUpdatedPreferences) => {
+        const initialSelectedBrands = ["adidas", "hoka", "asics", "nike", "saucony", "brooks", "newBalance"].map(
+            (brand) => parsedUpdatedPreferences.brands.includes(brand)
+        );
+        setSelectedBrands(initialSelectedBrands);
+        console.log(parsedUpdatedPreferences);
+        setUserBrandPrefs(parsedUpdatedPreferences.brands);
+        setSize(parsedUpdatedPreferences.size);
+        setSizeButtonText(parsedUpdatedPreferences.size);
+        setGender(parsedUpdatedPreferences.gender);
+        setGenderButtonText(parsedUpdatedPreferences.gender);
+
+    };
+
+    useEffect(() => {
+        const getUserPref = async () => {
+            if(isLoggedIn){
+            
+                const user = await Auth.currentAuthenticatedUser(); 
+    
+                const { "custom:preferences": updatedPreferences } = user.attributes;
+    
+        // Convert the preferences back to an object if needed
+                const parsedUpdatedPreferences = JSON.parse(updatedPreferences);
+    
+                console.log("User preferences:", parsedUpdatedPreferences);
+                
+               
+    
+                updateStates(parsedUpdatedPreferences);
+            }
+    
+            else{
+            
+                const JSON_preferences = JSON.parse(localStorage.getItem("preferences"));
+    
+               
+                updateStates(JSON_preferences);
+            }
+        }
+        
+        getUserPref();
+
+    },[]);
 
 
     const navigate = useNavigate();
@@ -146,7 +194,7 @@ function Preferences({onPreferenceChange}) {
       
      
     <div className="titleContainer">
-      <MobilityButtons renderNext={false} backLink={"overview"} nextLink={""} />
+      <MobilityButtons renderNext={false} backLink={"home"} nextLink={""} />
       <div className="header">
         <h1 className="freeGuest larger-header">Help Us Find your Perfect Shoe Fit...</h1>
       </div>
@@ -190,4 +238,4 @@ function Preferences({onPreferenceChange}) {
   );
 }
 
-export default Preferences
+export default Settings
