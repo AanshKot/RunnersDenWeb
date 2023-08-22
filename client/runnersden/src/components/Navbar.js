@@ -18,7 +18,7 @@ export default function Navbar({handleClick,isLoggedIn,location}){
             </div>
 
             
-            <div className="navlink" onClick={() => handleClick("/myshoes")}>
+            <div className="navlink" onClick={() => handleClick("/shoes")}>
                 <GiRunningShoe className={location === "myshoes" ? "selected-icon" : "deselected-icon"} />
             </div>
 

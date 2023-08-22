@@ -43,7 +43,7 @@ const secretAccessKey = process.env.SECRET_ACCESS_KEY;
   }
 
   async function callAPI(data) {
-    const url = 'http://15.156.88.77:5000/api';
+    const url = 'http://univesole-app-balancer-1660443584.ca-central-1.elb.amazonaws.com/api';
     const response_data = await makePostRequest(url, data);
     if (response_data) {
         console.log('Response:', response_data);
@@ -69,7 +69,16 @@ router.post("/",async (req,res) => {
 
     const userPref = req.body.preferences;
 
-
+    if (
+      userID === null ||
+      left_link === null ||
+      right_link === null ||
+      paper_size === null ||
+      input_size === null ||
+      sex === null
+  ) {
+      return res.status(400).json({ error: "One or more required values are null, please redo your preferences and reselect your paper sizing mat." });
+  }
 
     const data = {
         userid: userID,

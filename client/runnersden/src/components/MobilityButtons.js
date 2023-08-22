@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom"
 
 
 
-
 function Back({backlink,clickHandler}){
     return(
         <div className="back"> <button onClick={() => clickHandler(backlink)} className="mobButton"><p className="mobButtons"> &lt;Back </p></button> </div>
@@ -23,6 +22,7 @@ export default function MobilityButton({renderNext,backLink,nextLink}){
     
         navigate(`/${link}`);
     };
+
 
     return(
         <div className="mobilityButtons">

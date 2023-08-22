@@ -1,18 +1,26 @@
 import React, { useEffect } from 'react'
 import {  useNavigate } from 'react-router-dom';
 
-function RetakePhoto() {
+function RetakePhoto({errMsgContent}) {
 
   const navigate = useNavigate();
 
   // Function to navigate to the /leftfoot URL after a delay
-  const redirectToLeftFoot = () => {
-    navigate('/leftfoot');
+  const redirectTo = (errMsgContent) => {
+    // navigate('/leftfoot');
+
+    if(errMsgContent === "One or more required values are null, please redo your preferences and reselect your paper sizing mat."){
+      navigate("/preferences")
+    }
+
+    else{
+      navigate("/leftfoot")
+    }
   };
 
   // Trigger the navigation after 4 seconds
   useEffect(()=>{
-    setTimeout(redirectToLeftFoot, 3000);
+    setTimeout(() => redirectTo(errMsgContent), 3000);
   },[]);
   
 
@@ -21,9 +29,9 @@ function RetakePhoto() {
     <div className='overlay'></div>
 
     <div className='verify-content'>
-      <p className='verify-header'>There was an error with your foot scan!</p>
+      <p className='verify-header'>There was an error</p>
       <p className='verify-text'>
-        You will be redirected to redo your footscans shortly.
+        {errMsgContent}
       </p>
 
     </div>

@@ -14,7 +14,7 @@ import FilterDropdown from '../components/shoesComponents/FilterDropdown';
 
 
 
-function Shoes({guestID,guestPreferences,isLoggedIn}) {
+function Shoes({guestID,isLoggedIn}) {
 
     const navigate = useNavigate();
 
@@ -26,6 +26,7 @@ function Shoes({guestID,guestPreferences,isLoggedIn}) {
     const [ascendingButton,setAscendingButton] = useState(<FontAwesomeIcon className='ascending-button' icon={faSortUp} />);
     const [shoeRecs,setShoeRecs] = useState([]);
     const [renderErrMsg,setRenderErrMsg] = useState(false);
+    const [errMsgContent,setErrMsgContent] = useState("");
     const [searchText,setSearchText] = useState("");
     const [filteredShoeRecs, setFilteredShoeRecs] = useState([]);
     const [unfilteredBrands,setUnfilteredBrands] = useState({"Adidas ": true,
@@ -189,6 +190,7 @@ function Shoes({guestID,guestPreferences,isLoggedIn}) {
                     } catch (error) {
                         console.log(error);
                         setRenderErrMsg(true);
+                        setErrMsgContent(error.message);
                     }
 
             
@@ -197,7 +199,7 @@ function Shoes({guestID,guestPreferences,isLoggedIn}) {
                     console.log(error);
                 }
               }).catch(async () => {
-                console.log(guestPreferences);
+                const guestPreferences = JSON.parse(localStorage.getItem("preferences"));
     
                 const requestOptions = {
                     method: 'POST',
@@ -236,6 +238,7 @@ function Shoes({guestID,guestPreferences,isLoggedIn}) {
                 } catch (error) {
                     console.log(error);
                     setRenderErrMsg(true);
+                    setErrMsgContent(error.message);
                 }
                 
               });
@@ -281,7 +284,7 @@ function Shoes({guestID,guestPreferences,isLoggedIn}) {
                     /></div>
                 </div>
 
-                { renderErrMsg && (<RetakePhoto />)}
+                { renderErrMsg && (<RetakePhoto errMsgContent = {errMsgContent} />)}
                 
                 <div className='shoes'>
                     {filteredShoeRecs.length > 0 ? <DropDown shoeList={filteredShoeRecs} isAscending={ascending} unfilterBrands={unfilteredBrands}/> : <Loading />}

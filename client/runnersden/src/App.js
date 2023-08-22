@@ -21,6 +21,7 @@ import LeftFoot from "./pages/LeftFoot";
 import RightFoot from "./pages/RightFoot";
 import Confirmation from "./pages/Confirmation";
 import Shoes from "./pages/Shoes";
+import Settings from "./pages/Settings";
 
 
 
@@ -67,9 +68,9 @@ function LocationListener(){
 
 function App() {
   const [loggedIn,setLoggedIn] = useState(false);
-  const [preferences,setPref] = useState({"brands":[],"size":null,"gender":null});
   
-  const [user,setUser] = useState({"type":"guest"});
+  
+  
   const [guestID,setGuestID] = useState(999999999);
 
   const navigate = useNavigate();
@@ -90,13 +91,13 @@ function App() {
 
   useEffect(() => {
     AssessLoggedInState()
-    console.log(preferences);
+    
     console.log(guestID);
   },[])
 
   const signOut = async () => {
     try{
-      setUser({"type":"guest","preferences":preferences})
+     
       await Auth.signOut();
       console.log("Logged user out")
       setLoggedIn(false);
@@ -131,7 +132,7 @@ function App() {
   const onVerify = async (email,pwd) => {
     setLoggedIn(true);
     await Auth.signIn(email,pwd);
-    setUser(await Auth.currentAuthenticatedUser());
+    
     console.log("user has signed up!");
     navigate("/overview");
   }
@@ -155,7 +156,7 @@ function App() {
     setLoggedIn(false);
     const guest = generateUniqueID();
     setGuestID(guest);
-    setUser({"type":"guest","preferences":preferences});
+    
     navigate("/overview");
   }
 
@@ -172,7 +173,7 @@ function App() {
         const { attributes } = await Auth.currentAuthenticatedUser();
         console.log('current attributes:', attributes);
   
-        setPref(set_preferences);
+        
         console.log("user preferences updated successfully");
       } catch (error) {
         console.log("Error updating preferences");
@@ -180,7 +181,10 @@ function App() {
       }
     } else {
       console.log(set_preferences);
-      setPref(set_preferences);
+      const prefJson = JSON.stringify(set_preferences);
+  
+      await localStorage.setItem("preferences",prefJson);
+      console.log(JSON.parse(localStorage.getItem("preferences")));
     }
   };
   
@@ -226,7 +230,8 @@ function App() {
               <Route path="/leftfoot" element={<LeftFoot isLoggedIn={loggedIn} guestID={guestID}/>} /> 
               <Route path="/rightfoot" element={<RightFoot isLoggedIn={loggedIn} guestID = {guestID}/> }  />
               <Route path="/confirmation/:type" element={<Confirmation />} />
-              <Route path="/shoes" element = {<Shoes guestPreferences={preferences} isLoggedIn={loggedIn} guestID={guestID} />} /> 
+              <Route path="/shoes" element = {<Shoes  isLoggedIn={loggedIn} guestID={guestID} />} /> 
+              <Route path="/settings" element = {<Settings onPreferenceChange={onPreferencesChange} />} /> 
               <Route path='*' element = {<NoPage/>} />
 
               {/* pass isLoggedIn as prop into sub-routes to determine if user is logged in, on the SignInasGuest the sign in button will simply redirect the user to the overview page /}
