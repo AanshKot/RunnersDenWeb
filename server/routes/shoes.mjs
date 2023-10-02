@@ -92,7 +92,7 @@ router.post("/",async (req,res) => {
       };
     
 
-    console.log(data);
+    //console.log(data);
     
 
     try {
@@ -100,7 +100,7 @@ router.post("/",async (req,res) => {
 
         const shoeModelRecs = shoes["Shoe Model Recommendations"];
 
-        console.log(shoeModelRecs);
+        console.log("API shoe recs: ",shoeModelRecs);
 
         const left_error = shoes["left_error"];
         const right_error = shoes["right_error"];
@@ -136,15 +136,16 @@ router.post("/",async (req,res) => {
 
           spreadsheetId,
 
-          range: "Sheet1!A:D",
+          range: "Sheet1!A:E",
           
           
         })
 
-        console.log(getRows);
+        // console.log(getRows);
       
     
         const shoesData = getRows.data.values;
+        console.log(shoesData);
 
         const sendClientRecs = [];
 
@@ -155,13 +156,14 @@ router.post("/",async (req,res) => {
           for(let i = 0; i < shoesData.length; i++){
             if(shoesData[i].length != 0 && shoesData[i][1] === modelName){
               const rec_size = shoeModelRecs[modelName]
-              sendClientRecs.push([shoesData[i],rec_size]);
+              const colorArr = shoeModelRecs[4]
+              sendClientRecs.push([shoesData[i],rec_size,colorArr]);
             }
           }
 
         }
 
-        console.log("Client Recommendations: ",sendClientRecs);
+        //console.log("Client Recommendations: ",sendClientRecs);
 
         res.status(200).json({ sendClientRecs });
     } catch (error) {

@@ -7,6 +7,7 @@ import { faC, faCartShopping, faFilter, faSortDown, faSortUp } from '@fortawesom
 import RetakePhoto from '../components/shoesComponents/RetakePhoto';
 import Loading from '../components/shoesComponents/Loading';
 import FilterDropdown from '../components/shoesComponents/FilterDropdown';
+import Colorway from '../components/shoesComponents/Colorway';
 
 
 
@@ -49,8 +50,11 @@ function Shoes({guestID,isLoggedIn}) {
         
     }
     
-    function DropDownRow({brand,model,shoeSize,shoeBuyLink,shoeImageLink}){
+    // only dropdownrow is rerendering, not the dropdown itself, fix this issue tom morning
+    function DropDownRow({brand,model,shoeSize,shoeBuyLink,shoeImageLink,colorway,handleColorSelection,selectedColor}){
         const model_withoutUnderscore = model.replace(/_/g,' ');
+
+
         return(
             
             <div className='shoe-container'>
@@ -62,12 +66,15 @@ function Shoes({guestID,isLoggedIn}) {
                             {shoeSize}
                         </div>
 
-                        <img className='shoe-img' src={shoeImageLink} alt='img.jpg' />
+                        <img className='shoe-img' src={shoeImageLink} alt='img.png' />
 
                         <p className='shoe-desc'>{brand} | {model_withoutUnderscore}</p>
                     </div>
 
-                    <div >
+
+
+                    <div className='shoeAttributes' >
+                        <Colorway colorsHash={colorway} model={model} handleClick={handleColorSelection} selectedColor={selectedColor} />
                         <a href={shoeBuyLink}><FontAwesomeIcon icon={faCartShopping} /></a>
                     </div>
             </div>
@@ -77,7 +84,7 @@ function Shoes({guestID,isLoggedIn}) {
     }
 
     function DropDown({shoeList,isAscending,unfilterBrands}){
-
+            
             let sortedShoeList = [...shoeList];
 
 
@@ -93,20 +100,48 @@ function Shoes({guestID,isLoggedIn}) {
                 const brand = shoeAndSize[0][0];
                 return unfilteredBrands[brand]; // Check if the brand is in the unfilteredBrands hashmap
             });
-        
+
+            const handleColorClick = (model, shoeImageLink,color) => {
+                // Find the index of the matching model in the state
+                const rowIndex = dropdownRows.findIndex((row) => row.props.model === model);
+                
+                const dropDownRowProps = dropdownRows[rowIndex].props;
+              
+                
+                const newDropDownRow = <DropDownRow brand={dropDownRowProps.brand} model={model} shoeSize={dropDownRowProps.shoeSize} shoeBuyLink={dropDownRowProps.shoeBuyLink} shoeImageLink={shoeImageLink} colorway={dropDownRowProps.colorway} handleColorSelection={handleColorClick} selectedColor = {color} />
+
+                if (rowIndex !== -1) {
+                  // Create a copy of the dropdownRows array
+                  const newDropdownRows = [...dropdownRows];
+                  // Update the shoeImageLink for the matching model
+                  newDropdownRows[rowIndex] = newDropDownRow
+                  // Update the state with the modified array
+                  setDropDownRows(newDropdownRows);
+                }
+              };
+
+            const initialDropDownRows = filteredShoeList.map((shoeAndSize, index) => (
+                <DropDownRow
+                    key={index}
+                    brand={shoeAndSize[0][0]}
+                    model={shoeAndSize[0][1]}
+                    shoeSize={shoeAndSize[1]}
+                    shoeBuyLink={shoeAndSize[0][2]}
+                    shoeImageLink={shoeAndSize[0][3]}
+                    colorway={shoeAndSize[0][4]}
+                    handleColorSelection={handleColorClick}
+                />
+            ))
+            
+            const [dropdownRows,setDropDownRows] = useState(initialDropDownRows);
+
+
+            
+
 
             return(
                 <div className='dropDown'>
-                    {filteredShoeList.map((shoeAndSize, index) => (
-                        <DropDownRow
-                            key={index}
-                            brand={shoeAndSize[0][0]}
-                            model={shoeAndSize[0][1]}
-                            shoeSize={shoeAndSize[1]}
-                            shoeBuyLink={shoeAndSize[0][2]}
-                            shoeImageLink={shoeAndSize[0][3]}
-                        />
-                    ))}
+                    {dropdownRows}
                 </div>
             );
         
@@ -232,6 +267,7 @@ function Shoes({guestID,isLoggedIn}) {
                     // return data.shoes["Shoe Model Recommendations"];
                     else{
                         const data = await response.json();
+                        // console.log(data.sendClientRecs);
                         setShoeRecs(data.sendClientRecs);
                      }
                     // console.log(data);

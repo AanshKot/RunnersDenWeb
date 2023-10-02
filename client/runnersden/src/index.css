@@ -1141,3 +1141,43 @@ h1,h2{
   box-shadow: #1DFF54;
 
 }
+
+
+
+/* ================== Colorway =========================*/
+
+.shoeAttributes{
+  height: 100%;
+}
+
+.colorway{
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+}
+
+.black{
+  height: 13%;
+  width:100%;
+  background: black ;
+}
+
+.red{
+  height: 13%;
+  width:100%;
+  background:red;
+}
+
+.blue{
+  height: 13%;
+  width:100%;
+  background: blue;
+}
+
+
+.selectedColor{
+  border: 2px solid rgba(45, 165, 252, 1);
+}
